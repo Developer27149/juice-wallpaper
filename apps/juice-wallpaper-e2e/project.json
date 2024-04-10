@@ -1,0 +1,9 @@
+{
+  "name": "juice-wallpaper-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/juice-wallpaper-e2e/src",
+  "tags": [],
+  "implicitDependencies": ["juice-wallpaper"],
+  "// targets": "to see all targets run: nx show project juice-wallpaper-e2e --web",
+  "targets": {}
+}
