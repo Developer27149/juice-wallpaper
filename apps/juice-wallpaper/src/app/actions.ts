@@ -1,8 +1,9 @@
 'use server';
 
+import { Wallpaper } from '@juice-wallpaper/types';
 import { revalidateTag } from 'next/cache';
 
-export async function getWallpapers(): Promise<{ id: number; name: string }[]> {
+export async function getWallpapers(): Promise<Wallpaper[]> {
   const res = await fetch(process.env.BACKEND_URL + '/api/wallpapers', {
     next: {
       tags: ['wallpapers'],

@@ -1,0 +1,22 @@
+{
+  "name": "juice-wallpaper",
+  "version": "1.0.0",
+  "scripts": {
+    "cspell": "nx exec -- cspell ./**"
+  },
+  "nx": {
+    "includedScripts": [
+      "cspell"
+    ],
+    "targets": {
+      "cspell": {
+        "cache": true,
+        "inputs": [
+          "default",
+          "^default"
+        ],
+        "outputs": []
+      }
+    }
+  }
+}

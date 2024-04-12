@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://myuser:mypassword@localhost:5432/juice-wallpaper"
+}
+
+model User {
+  id        String      @id @default(cuid())
+  email     String      @unique
+  avatar    String
+  password  String
+  name      String
+  createdAt DateTime    @default(now())
+  inviterId Int? // 可选选项
+  bio       String?
+  showEmail Boolean     @default(false)
+  Wallpaper Wallpaper[]
+}
+
+model Wallpaper {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  description String   @default("no description")
+  // 定义一对一的关系，一个 wallpaper 只能有一个 author
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId String
+  Tag   Tag?    @relation(fields: [tagId], references: [id])
+  tagId String?
+}
+
+model Tag {
+  id         String      @id @default(cuid())
+  name       String
+  wallpapers Wallpaper[]
+}

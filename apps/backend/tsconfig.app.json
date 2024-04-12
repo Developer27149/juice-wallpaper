@@ -5,8 +5,18 @@
     "module": "commonjs",
     "types": ["node"],
     "emitDecoratorMetadata": true,
-    "target": "es2021"
+    "target": "ESNext",
+    "experimentalDecorators": true,
+    "paths": {
+      "@app/*": ["src/*"],
+      "@prisma/*": ["prisma/*"]
+    },
+    "baseUrl": "."
   },
   "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
-  "include": ["src/**/*.ts"]
+  "include": [
+    "src/**/*.ts",
+    "prisma/prisma.module.ts",
+    "prisma/prisma.service.ts"
+  ]
 }
