@@ -16,12 +16,12 @@ datasource db {
 model User {
   id        String      @id @default(cuid())
   email     String      @unique
-  avatar    String
+  avatar    String?     @default("https://avatars.githubusercontent.com/u/23721611?s=400&u=77ba6401bd4857f2b34b30b7b8b7a86bc3842ca3&v=4")
   password  String
   name      String
   createdAt DateTime    @default(now())
   inviterId Int? // 可选选项
-  bio       String?
+  bio       String?     @default("Mr.X")
   showEmail Boolean     @default(false)
   Wallpaper Wallpaper[]
 }

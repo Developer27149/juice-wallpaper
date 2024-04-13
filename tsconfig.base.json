@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@juice-wallpaper/types": ["types/src/index.ts"]
+      "@juice-wallpaper/types": ["types/src/index.ts"],
+      "@backend/*": ["apps/backend/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

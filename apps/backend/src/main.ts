@@ -3,7 +3,7 @@
  * This is only a minimal backend to get started.
  */
 
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app/app.module';
@@ -11,17 +11,21 @@ import { AppModule } from './app/app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // add Swagger API documentation
   const config = new DocumentBuilder()
     .setTitle('Juice Wallpaper Backend')
     .setDescription('The Juice Wallpaper API description')
     .setVersion('0.1')
     .build();
-
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
+  // add validation pipe
+  app.useGlobalPipes(new ValidationPipe());
+
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
+
   const port = process.env.PORT || 3001;
   await app.listen(port);
   Logger.log(

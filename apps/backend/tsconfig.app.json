@@ -6,12 +6,7 @@
     "types": ["node"],
     "emitDecoratorMetadata": true,
     "target": "ESNext",
-    "experimentalDecorators": true,
-    "paths": {
-      "@app/*": ["src/*"],
-      "@prisma/*": ["prisma/*"]
-    },
-    "baseUrl": "."
+    "experimentalDecorators": true
   },
   "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"],
   "include": [
