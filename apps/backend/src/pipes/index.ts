@@ -16,3 +16,20 @@ export class UniqueUserPipe implements PipeTransform {
     return value;
   }
 }
+
+
+// 通过 id 检查用户是否存在
+@Injectable()
+export class UserExistsPipe implements PipeTransform {
+  constructor(private prisma: PrismaService) { }
+
+  async transform(id: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+    });
+    if (!user) {
+      throw new BadRequestException('User does not exist');
+    }
+    return id;
+  }
+}

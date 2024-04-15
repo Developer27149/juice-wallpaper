@@ -1,4 +1,4 @@
-import { Body, Module, Post } from '@nestjs/common';
+import { Body, Delete, Module, Param, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { PrismaModule } from '../../../prisma/prisma.module';
@@ -15,5 +15,15 @@ export class UsersModule {
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
+  }
+
+  @Post('login')
+  login(@Body() createUserDto: CreateUserDto) {
+    return this.usersService.login(createUserDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.usersService.remove(id);
   }
 }
