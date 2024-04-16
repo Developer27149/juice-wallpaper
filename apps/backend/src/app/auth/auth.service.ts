@@ -25,6 +25,7 @@ export class AuthService {
     }
 
     const jwtToken = await this.genJWTToken({ email, id: user.id });
+    console.log('token:', jwtToken)
     return {
       jwt: jwtToken,
       user,

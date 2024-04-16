@@ -18,8 +18,17 @@ export class UsersService {
     return this.prisma.user.findMany();
   }
 
+  findMany(page: number, pageSize: number) {
+    return this.prisma.user.findMany({
+      take: pageSize,
+      skip: (page - 1) * pageSize,
+    });
+  }
+
   findOne(id: string) {
-    return `This action returns a #${id} user`;
+    return this.prisma.user.findFirst({
+      where: { id },
+    })
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
@@ -47,4 +56,5 @@ export class UsersService {
       where: loginUserDto,
     });
   }
+
 }
