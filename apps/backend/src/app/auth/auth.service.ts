@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { LoginUserDto } from '../users/dto/login-user.dto';
 import { PrismaService } from '../../../prisma/prisma.service';
-import * as jwt from 'jsonwebtoken';
 import { CreateUserDto } from '../users/dto/create-user.dto';
+import { genToken } from '../../utils/cookie';
 
 @Injectable()
 export class AuthService {
@@ -24,10 +24,9 @@ export class AuthService {
       throw new Error('Email or password is incorrect');
     }
 
-    const jwtToken = await this.genJWTToken({ email, id: user.id });
-    console.log('token:', jwtToken)
+    const token = genToken({ email, id: user.id });
     return {
-      jwt: jwtToken,
+      token,
       user,
     }
   }
@@ -46,8 +45,6 @@ export class AuthService {
     return this.login({ email: data.email, password: data.password });
   }
 
-  async genJWTToken(payload: { email: string, id: string }): Promise<string> {
-    return jwt.sign(payload, process.env.JWT_SECRET ?? '__JWT_SECRET__', { expiresIn: '1h' });
-  }
+
 
 }

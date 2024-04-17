@@ -1,10 +1,10 @@
-import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { LoginUserDto } from '../users/dto/login-user.dto';
-import { CreateUserDto } from '../users/dto/create-user.dto';
+import { Body, Controller, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { UniqueUserPipe } from '../../pipes/index';
 import { jwtCookieOption } from '../../utils/cookie';
+import { CreateUserDto } from '../users/dto/create-user.dto';
+import { LoginUserDto } from '../users/dto/login-user.dto';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
@@ -12,19 +12,16 @@ export class AuthController {
 
   @Post('register')
   async register(@Res() res: Response, @Body(UniqueUserPipe) createUserDto: CreateUserDto) {
-    const { jwt, user } = await this.authService.register(createUserDto);
-    res.cookie('jwt', jwt, jwtCookieOption);
+    const { token, user } = await this.authService.register(createUserDto);
+    res.cookie('token', token, jwtCookieOption);
     return res.status(200).json(user);
   }
 
   @Post('login')
-  async login(@Req() req: Request, @Res() res: Response, @Body() loginUserDto: LoginUserDto) {
+  async login(@Res() res: Response, @Body() loginUserDto: LoginUserDto) {
     console.log('loginUser', loginUserDto);
-    const { jwt, user } = await this.authService.login(loginUserDto);
-    res.cookie('jwt', jwt, jwtCookieOption);
+    const { token, user } = await this.authService.login(loginUserDto);
+    res.cookie('token', token, jwtCookieOption);
     return res.status(200).json(user);
   }
-
-
-
 }

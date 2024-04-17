@@ -8,12 +8,15 @@ import {
   UsePipes,
   Query,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserExistsPipe } from '../../pipes/index';
+import { AuthGuard } from '../../guard';
 
 @Controller('users')
+@UseGuards(AuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
