@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@mantine/core": "^7.7.1",
+    "@mantine/form": "^7.8.0",
     "@mantine/hooks": "^7.7.1",
     "@nestjs/common": "^10.0.2",
     "@nestjs/core": "^10.0.2",

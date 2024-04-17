@@ -5,7 +5,6 @@ import DeleteButton from './DeleteButton';
 
 export default async function WallpaperList() {
   const wallpapers = await getWallpapers();
-  console.log(wallpapers);
 
   return (
     <div className="wallpaper-list my-8 p-2 rounded-sm">

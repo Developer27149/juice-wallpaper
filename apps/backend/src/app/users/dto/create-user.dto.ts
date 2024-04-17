@@ -1,4 +1,3 @@
-import { IsUniqueEmail } from '../../../validators/index';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsOptional } from 'class-validator';
 

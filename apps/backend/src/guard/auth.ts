@@ -1,6 +1,6 @@
+import { verifyToken } from "@juice-wallpaper/utils";
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { Request } from "express";
-import { verifyToken } from "../utils/cookie";
 
 @Injectable()
 export class AuthGuard implements CanActivate {

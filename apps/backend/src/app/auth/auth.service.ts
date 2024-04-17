@@ -1,8 +1,8 @@
+import { genToken } from '@juice-wallpaper/utils';
 import { Injectable } from '@nestjs/common';
-import { LoginUserDto } from '../users/dto/login-user.dto';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
-import { genToken } from '../../utils/cookie';
+import { LoginUserDto } from '../users/dto/login-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -44,7 +44,4 @@ export class AuthService {
     // 注册成功后，生成 jwt 和返回 user 信息
     return this.login({ email: data.email, password: data.password });
   }
-
-
-
 }

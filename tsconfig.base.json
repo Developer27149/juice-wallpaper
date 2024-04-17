@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@backend/*": ["apps/backend/*"],
-      "@juice-wallpaper/types": ["types/src/index.ts"]
+      "@juice-wallpaper/types": ["types/src/index.ts"],
+      "@juice-wallpaper/utils": ["utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

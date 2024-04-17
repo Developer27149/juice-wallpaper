@@ -1,6 +1,7 @@
-import './global.css';
-import '@mantine/core/styles.css';
 import { createTheme, MantineProvider } from '@mantine/core';
+import '@mantine/core/styles.css';
+import './global.css';
+import Nav from './ui/Nav';
 
 export const metadata = {
   title: 'Welcome to juice-wallpaper',
@@ -19,7 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <MantineProvider theme={theme}>{children}</MantineProvider>
+        <MantineProvider theme={theme}>
+          <Nav />
+          <main>{children}</main>
+        </MantineProvider>
       </body>
     </html>
   );
