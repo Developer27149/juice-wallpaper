@@ -12,3 +12,10 @@ export interface IUser {
   password: string;
   showEmail: boolean;
 }
+
+export interface IJwt {
+  email: string;
+  id: string;
+  iat: number;
+  exp: number;
+}

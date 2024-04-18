@@ -17,16 +17,16 @@ const nextConfig = {
       {
         source: '/api/:path*',
         destination: 'http://localhost:3001/api/:path*',
-      }
-    ]
+      },
+    ];
   },
   images: {
     remotePatterns: [
       {
-        hostname: 'images.unsplash.com'
-      }
-    ]
-  }
+        hostname: '*',
+      },
+    ],
+  },
 };
 
 const plugins = [

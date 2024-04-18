@@ -1,5 +1,7 @@
 import { createTheme, MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
+import { Notifications } from '@mantine/notifications';
+import '@mantine/notifications/styles.css';
 import './global.css';
 import Nav from './ui/Nav';
 
@@ -23,6 +25,7 @@ export default function RootLayout({
         <MantineProvider theme={theme}>
           <Nav />
           <main>{children}</main>
+          <Notifications position="bottom-center" limit={3} />
         </MantineProvider>
       </body>
     </html>

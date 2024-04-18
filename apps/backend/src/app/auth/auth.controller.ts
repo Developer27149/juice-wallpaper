@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { UniqueUserPipe } from '../../pipes/index';
 import { jwtCookieOption } from '../../utils/cookie';
@@ -9,6 +9,11 @@ import { AuthService } from './auth.service';
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
+
+  @Get()
+  async getUser(@Query('token') token: string) {
+    return this.authService.getUser(token);
+  }
 
   @Post('register')
   async register(@Res() res: Response, @Body(UniqueUserPipe) createUserDto: CreateUserDto) {

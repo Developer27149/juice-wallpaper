@@ -1,5 +1,5 @@
-import { genToken } from '@juice-wallpaper/utils';
-import { Injectable } from '@nestjs/common';
+import { genToken, verifyToken } from '@juice-wallpaper/utils';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserDto } from '../users/dto/login-user.dto';
@@ -21,13 +21,32 @@ export class AuthService {
     })
 
     if (!user) {
-      throw new Error('Email or password is incorrect');
+      throw new HttpException('Email or password is incorrect', HttpStatus.UNAUTHORIZED);
     }
 
     const token = genToken({ email, id: user.id });
     return {
       token,
       user,
+    }
+  }
+
+
+  /**
+   * 退出登录
+   * @param token
+   * @returns
+   */
+  async logout(token: string) {
+    // 退出登录
+    try {
+      const { email } = verifyToken(token);
+      return this.prisma.user.findUnique({
+        where: { email },
+      })
+    } catch (error) {
+      throw new HttpException('Token is invalid', HttpStatus.UNAUTHORIZED);
+      console.log(`token is invalid:`, error)
     }
   }
 
@@ -44,4 +63,23 @@ export class AuthService {
     // 注册成功后，生成 jwt 和返回 user 信息
     return this.login({ email: data.email, password: data.password });
   }
+
+  /**
+   * 通过 token 获取用户信息
+   * @param token
+   * @returns
+   */
+  async getUser(token: string) {
+    // 通过 token 获取用户信息
+    try {
+      const { email } = verifyToken(token);
+      return this.prisma.user.findUnique({
+        where: { email },
+      })
+    } catch (error) {
+      throw new HttpException('Token is invalid', HttpStatus.UNAUTHORIZED);
+      console.log(`token is invalid:`, error)
+    }
+  }
+
 }

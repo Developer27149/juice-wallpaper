@@ -1,3 +1,4 @@
+import { IJwt } from '@juice-wallpaper/types';
 import * as jwt from 'jsonwebtoken';
 
 export const genToken = (payload: { email: string, id: string }) => {
@@ -5,5 +6,5 @@ export const genToken = (payload: { email: string, id: string }) => {
 }
 
 export const verifyToken = (token: string) => {
-  return jwt.verify(token, process.env['JWT_SECRET'] ?? '__JWT_SECRET__');
+  return jwt.verify(token, process.env['JWT_SECRET'] ?? '__JWT_SECRET__') as IJwt;
 }

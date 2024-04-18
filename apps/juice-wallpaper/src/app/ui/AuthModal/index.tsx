@@ -2,12 +2,14 @@
 import { Button, Modal, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
+import { notifications } from '@mantine/notifications';
 import { useState } from 'react';
 import { login } from '../../actions';
 
 export default function AuthModal() {
   const [opened, { open, close }] = useDisclosure(false);
 
+  const [loading, setLoading] = useState(false);
   const [haveAccount, setHaveAccount] = useState(false);
 
   const registerForm = useForm({
@@ -39,9 +41,26 @@ export default function AuthModal() {
   });
 
   const onRegister = () => {};
-  const onLogin = (values: any) => {
-    console.log(values);
-    login(values);
+  const onLogin = async (values: any) => {
+    try {
+      setLoading(true);
+      console.log(values);
+      const result = await login(values);
+      if ('message' in result) {
+        throw new Error(result.message);
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        notifications.show({
+          title: 'Login failed',
+          message: error?.message ?? 'Please check your email and password',
+          color: 'red',
+          radius: 'lg',
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -83,7 +102,7 @@ export default function AuthModal() {
               >
                 Register a new account
               </Button>
-              <Button type="submit" size="sm" variant="light">
+              <Button type="submit" loading={loading} size="sm" variant="light">
                 Submit
               </Button>
             </div>
@@ -124,7 +143,7 @@ export default function AuthModal() {
               >
                 I have an account
               </Button>
-              <Button type="submit" size="sm" variant="light">
+              <Button type="submit" loading={loading} size="sm" variant="light">
                 Submit
               </Button>
             </div>
