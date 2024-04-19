@@ -1,12 +1,20 @@
 'use client';
 
 import { Avatar, Menu, Text, rem } from '@mantine/core';
-// import Image from 'next/image';
 
 interface AvatarMenuProps {
   avatar: string;
 }
 export default function AvatarMenu({ avatar }: AvatarMenuProps) {
+  const onLogout = async () => {
+    await fetch('/api/logout');
+    // 如果不在首页，则返回首页
+    if (window.location.pathname !== '/') {
+      window.location.href = '/';
+    } else {
+      window.location.reload();
+    }
+  };
   return (
     <Menu shadow="md" width={200} trigger="click-hover">
       <Menu.Target>
@@ -68,11 +76,15 @@ export default function AvatarMenu({ avatar }: AvatarMenuProps) {
         </Menu.Item>
         <Menu.Item
           color="red"
-          // leftSection={
-          //   <IconTrash style={{ width: rem(14), height: rem(14) }} />
-          // }
+          onClick={onLogout}
+          leftSection={
+            <i
+              className="i-material-symbols-logout-sharp"
+              style={{ width: rem(14), height: rem(14) }}
+            />
+          }
         >
-          Delete my account
+          Logout
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>

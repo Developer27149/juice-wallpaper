@@ -29,4 +29,11 @@ export class AuthController {
     res.cookie('token', token, jwtCookieOption);
     return res.status(200).json(user);
   }
+
+  @Post('logout')
+  async logout(@Res() res: Response, @Body('token') token: string) {
+    await this.authService.logout(token);
+    res.clearCookie('token');
+    return res.status(200).json({ message: 'logout success' });
+  }
 }

@@ -15,12 +15,14 @@ export async function getUserInfo(): Promise<null | IUser> {
         },
         cache: 'no-cache',
       });
+      if (res.status !== 200) {
+        return null;
+      }
       return await res.json();
     } else {
       return null;
     }
   } catch (error) {
-    console.log('get user info failed.', error)
     return null;
   }
 }
@@ -48,20 +50,3 @@ export async function login(params: { email: string, password: string }): Promis
   return data;
 }
 
-export async function logout() {
-  const cookieStore = cookies();
-  const token = cookieStore.get('token')?.value;
-  if (!token) {
-    return;
-  }
-  const res = await fetch(process.env.BACKEND_URL + '/api/auth/logout', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ token }),
-  });
-  const data = await res.json();
-  revalidateTag('auth');
-  return data;
-}

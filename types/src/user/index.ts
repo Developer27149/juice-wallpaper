@@ -16,6 +16,7 @@ export interface IUser {
 export interface IJwt {
   email: string;
   id: string;
+  key: number
   iat: number;
   exp: number;
 }

@@ -5,6 +5,7 @@ import AvatarMenu from './AvatarMenu';
 
 export default async function Nav() {
   const userInfo = await getUserInfo();
+
   return (
     <nav className="flex mx-auto items-center w-[768px] max-screen py-4">
       <div className="nav__logo">
@@ -24,10 +25,7 @@ export default async function Nav() {
             <a href="#">Contact</a>
           </li>
           {userInfo ? (
-            <>
-              <li className="text-sky-500">hi, {userInfo.name}</li>
-              <AvatarMenu avatar={userInfo.avatar} />
-            </>
+            <AvatarMenu avatar={userInfo.avatar} />
           ) : (
             <li>
               <AuthModal />

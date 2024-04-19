@@ -33,7 +33,7 @@ export class AuthService {
     // save key with user email to redis
     const key = Date.now()
     await this.redis.set(`${email}-${key}`, 0)
-    const token = genToken({ email, id: user.id });
+    const token = genToken({ email, id: user.id, key });
     return {
       token,
       user,
@@ -50,13 +50,12 @@ export class AuthService {
   async logout(token: string) {
     // 退出登录
     try {
-      const { email } = verifyToken(token);
-      return this.prisma.user.findUnique({
-        where: { email },
-      })
+      const { email, key } = verifyToken(token);
+      // 删除 redis 中的 key
+      return await this.redis.del(`${email}-${key}`)
     } catch (error) {
+      console.log('logout error:', error)
       throw new HttpException('Token is invalid', HttpStatus.UNAUTHORIZED);
-      console.log(`token is invalid:`, error)
     }
   }
 
@@ -82,13 +81,18 @@ export class AuthService {
   async getUser(token: string) {
     // 通过 token 获取用户信息
     try {
-      const { email } = verifyToken(token);
+      const { email, key } = verifyToken(token);
+      // 检查 redis 中是否存在 key
+      const res = await this.redis.get(`${email}-${key}`)
+      if (!res) {
+        throw new HttpException('Token is invalid', HttpStatus.UNAUTHORIZED);
+      }
       return this.prisma.user.findUnique({
         where: { email },
       })
     } catch (error) {
-      throw new HttpException('Token is invalid', HttpStatus.UNAUTHORIZED);
       console.log(`token is invalid:`, error)
+      throw new HttpException('Token is invalid', HttpStatus.UNAUTHORIZED);
     }
   }
 
