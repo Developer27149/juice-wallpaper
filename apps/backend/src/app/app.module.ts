@@ -1,6 +1,5 @@
+import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { Module } from '@nestjs/common';
-
-import { RedisModule } from 'nestjs-redis';
 import { PrismaService } from '../../prisma/prisma.service';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -14,8 +13,10 @@ import { WallpapersService } from './wallpapers/wallpapers.service';
 
 @Module({
   imports: [
-    RedisModule.forRootAsync({
-
+    RedisModule.forRoot({
+      config: {
+        url: process.env.REDIS_URL,
+      },
     }),
     UsersModule],
   controllers: [

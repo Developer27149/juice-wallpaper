@@ -19,3 +19,9 @@ export interface IJwt {
   iat: number;
   exp: number;
 }
+
+export interface ILoginResponse {
+  token: string;
+  user: IUser;
+  key: number;
+}

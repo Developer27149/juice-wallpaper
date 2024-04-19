@@ -4,9 +4,16 @@ import { PrismaService } from '../../../prisma/prisma.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginUserDto } from '../users/dto/login-user.dto';
 
+import { DEFAULT_REDIS_NAMESPACE, RedisService } from '@liaoliaots/nestjs-redis';
+import Redis from 'ioredis';
+
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService) { }
+  private readonly redis: Redis;
+
+  constructor(private prisma: PrismaService, private readonly redisService: RedisService) {
+    this.redis = this.redisService.getClient(DEFAULT_REDIS_NAMESPACE);
+  }
 
   /**
    * 登录服务返回 jwt 和 user 信息
@@ -23,11 +30,14 @@ export class AuthService {
     if (!user) {
       throw new HttpException('Email or password is incorrect', HttpStatus.UNAUTHORIZED);
     }
-
+    // save key with user email to redis
+    const key = Date.now()
+    await this.redis.set(`${email}-${key}`, 0)
     const token = genToken({ email, id: user.id });
     return {
       token,
       user,
+      key
     }
   }
 
