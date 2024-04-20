@@ -33,12 +33,7 @@ export class AuthService {
     // save key with user email to redis
     const key = Date.now()
     await this.redis.set(`${email}-${key}`, 0)
-    const token = genToken({ email, id: user.id, key });
-    return {
-      token,
-      user,
-      key
-    }
+    return genToken({ email, id: user.id, key });
   }
 
 
@@ -65,6 +60,13 @@ export class AuthService {
    * @returns
    */
   async register(createUserDto: CreateUserDto) {
+    // 检查用户名是否存在
+    const user = await this.prisma.user.findFirst({
+      where: { name: createUserDto.name },
+    })
+    if (user) {
+      throw new HttpException('Username already exists', HttpStatus.BAD_REQUEST);
+    }
     // 注册用户
     const data = await this.prisma.user.create({
       data: createUserDto,

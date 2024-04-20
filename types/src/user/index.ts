@@ -26,3 +26,14 @@ export interface ILoginResponse {
   user: IUser;
   key: number;
 }
+
+export interface IRegisterFormValue {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  verifyCode: string;
+}
+export interface ILoginFormValue {
+  email: string;
+  password: string;
+}

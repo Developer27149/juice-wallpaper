@@ -1,18 +1,27 @@
 'use client';
 
 import { Avatar, Menu, Text, rem } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 
 interface AvatarMenuProps {
   avatar: string;
 }
 export default function AvatarMenu({ avatar }: AvatarMenuProps) {
   const onLogout = async () => {
-    await fetch('/api/logout');
-    // 如果不在首页，则返回首页
-    if (window.location.pathname !== '/') {
-      window.location.href = '/';
-    } else {
-      window.location.reload();
+    try {
+      await fetch('/api/auth/logout');
+      // 如果不在首页，则返回首页
+      if (window.location.pathname !== '/') {
+        window.location.href = '/';
+      } else {
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log('logout error', error);
+      notifications.show({
+        title: 'Logout failed',
+        message: 'Please try again later',
+      });
     }
   };
   return (

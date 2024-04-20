@@ -1,15 +1,18 @@
 'use client';
+import { ILoginFormValue, IRegisterFormValue } from '@juice-wallpaper/types';
 import { Button, Modal, TextInput } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { isEmail, useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 import { useState } from 'react';
-import { login } from '../../actions';
+import { login, register } from '../../actions';
 
 export default function AuthModal() {
   const [opened, { open, close }] = useDisclosure(false);
 
   const [loading, setLoading] = useState(false);
+  const [sendedVerifyCode, setSendedVerifyCode] = useState(false);
+  const [countDown, setCountDown] = useState(6);
   const [haveAccount, setHaveAccount] = useState(false);
 
   const registerForm = useForm({
@@ -19,12 +22,22 @@ export default function AuthModal() {
       password: '',
       confirmPassword: '',
       verifyCode: '',
+      name: '',
     },
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+      email: isEmail('Invalid email'),
       password: (value) => (value.length >= 1 ? null : 'Password is too short'),
       confirmPassword: (value, values) =>
         value === values.password ? null : 'Passwords do not match',
+      verifyCode: (value) =>
+        value.length >= 1 ? null : 'Verify code is too short',
+      name: (value) => {
+        if (value.length === 0) {
+          return 'Name is required';
+        } else if (value.length > 20) {
+          return 'Name is too long';
+        }
+      },
     },
   });
 
@@ -40,8 +53,26 @@ export default function AuthModal() {
     },
   });
 
-  const onRegister = () => {};
-  const onLogin = async (values: any) => {
+  const onRegister = async (formValue: IRegisterFormValue) => {
+    try {
+      setLoading(true);
+      console.log(formValue);
+      await register(formValue);
+    } catch (error) {
+      console.log('register error', error);
+      if (error instanceof Error) {
+        notifications.show({
+          title: 'Register failed',
+          message: error?.message ?? 'Please check your email and password',
+          color: 'red',
+          radius: 'lg',
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+  const onLogin = async (values: ILoginFormValue) => {
     try {
       setLoading(true);
       console.log(values);
@@ -62,6 +93,20 @@ export default function AuthModal() {
       setLoading(false);
     }
   };
+  const onSendVerifyCode = () => {
+    setSendedVerifyCode(true);
+    const timer = setInterval(() => {
+      setCountDown((prev) => {
+        const currentCountDown = prev - 1;
+        if (currentCountDown === 0) {
+          clearInterval(timer);
+          setSendedVerifyCode(false);
+          return 6;
+        }
+        return currentCountDown;
+      });
+    }, 1000);
+  };
 
   return (
     <>
@@ -72,6 +117,7 @@ export default function AuthModal() {
           close();
         }}
         withCloseButton={false}
+        keepMounted={false}
       >
         <section className="text-center p-4 font-semibold text-xl">
           {haveAccount ? 'Login in' : 'Register a new account'}
@@ -108,7 +154,12 @@ export default function AuthModal() {
             </div>
           </form>
         ) : (
-          <form onSubmit={registerForm.onSubmit(console.log)}>
+          <form onSubmit={registerForm.onSubmit(onRegister)}>
+            <TextInput
+              label="Name"
+              placeholder="Your name"
+              {...registerForm.getInputProps('name')}
+            />
             <TextInput
               label="Email"
               placeholder="Your email"
@@ -126,11 +177,20 @@ export default function AuthModal() {
               type="password"
               {...registerForm.getInputProps('confirmPassword')}
             />
-            <TextInput
-              label="Verify code"
-              placeholder="Verify code"
-              {...registerForm.getInputProps('verifyCode')}
-            />
+            <div className="flex items-end gap-2">
+              <TextInput
+                label="Verify code"
+                placeholder="Verify code"
+                {...registerForm.getInputProps('verifyCode')}
+              />
+              <Button
+                size="sm"
+                onClick={onSendVerifyCode}
+                disabled={sendedVerifyCode}
+              >
+                {sendedVerifyCode ? countDown : 'Send code'}
+              </Button>
+            </div>
             <div className="flex justify-between items-center gap-4 mt-8">
               {/* change to login */}
               <Button

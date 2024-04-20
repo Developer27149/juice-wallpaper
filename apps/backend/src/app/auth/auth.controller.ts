@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Post, Query, Res } from '@nestjs/common';
-import { Response } from 'express';
+import { Body, Controller, Get, Post, Query, Req, Res } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { UniqueUserPipe } from '../../pipes/index';
 import { jwtCookieOption } from '../../utils/cookie';
 import { CreateUserDto } from '../users/dto/create-user.dto';
@@ -17,23 +17,29 @@ export class AuthController {
 
   @Post('register')
   async register(@Res() res: Response, @Body(UniqueUserPipe) createUserDto: CreateUserDto) {
-    const { token, user } = await this.authService.register(createUserDto);
+    const token = await this.authService.register(createUserDto);
     res.cookie('token', token, jwtCookieOption);
-    return res.status(200).json(user);
+    return res.status(200).json({ message: 'register success' });
   }
 
   @Post('login')
   async login(@Res() res: Response, @Body() loginUserDto: LoginUserDto) {
     console.log('loginUser', loginUserDto);
-    const { token, user } = await this.authService.login(loginUserDto);
+    const token = await this.authService.login(loginUserDto);
     res.cookie('token', token, jwtCookieOption);
-    return res.status(200).json(user);
+    return res.status(200).json({ message: 'login success' });
   }
 
-  @Post('logout')
-  async logout(@Res() res: Response, @Body('token') token: string) {
-    await this.authService.logout(token);
-    res.clearCookie('token');
-    return res.status(200).json({ message: 'logout success' });
+  @Get('logout')
+  async logoutGet(@Req() req: Request, @Res() res: Response) {
+    // nestjs 获取 cookie
+    const token = req.cookies['token'];
+    if (token) {
+      await this.authService.logout(token);
+      res.clearCookie('token');
+      return res.status(301).redirect('/');
+    } else {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
   }
 }
