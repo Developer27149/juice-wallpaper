@@ -24,7 +24,7 @@ export default function RootLayout({
       <body>
         <MantineProvider theme={theme}>
           <Nav />
-          <main>{children}</main>
+          <main className="w-[1200px] mx-auto max-w-screen">{children}</main>
           <Notifications position="bottom-center" limit={3} />
         </MantineProvider>
       </body>
