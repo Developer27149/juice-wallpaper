@@ -1,0 +1,15 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": false,
+  "tailwind": {
+    "config": "apps/juice-wallpaper/tailwind.config.js",
+    "css": "apps/juice-wallpaper/app/global.css",
+    "baseColor": "stone",
+    "cssVariables": true
+  },
+  "aliases": {
+    "components": "@juice-wallpaper/ui-components/components",
+    "utils": "@juice-wallpaper/ui-components/utils"
+  }
+}

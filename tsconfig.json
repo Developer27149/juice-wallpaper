@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@juice-wallpaper/ui-components": ["ui-components/src/index.ts"],
+      "@juice-wallpaper/ui-components/*": ["ui-components/src/*"]
+    }
+  }
+}

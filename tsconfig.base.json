@@ -17,7 +17,10 @@
     "paths": {
       "@backend/*": ["apps/backend/*"],
       "@juice-wallpaper/types": ["types/src/index.ts"],
-      "@juice-wallpaper/utils": ["utils/src/index.ts"]
+      "@juice-wallpaper/ui-components/server": ["ui-components/src/server.ts"],
+      "@juice-wallpaper/utils": ["utils/src/index.ts"],
+      "@juice-wallpaper/ui-components": ["ui-components/src/index.ts"],
+      "@juice-wallpaper/ui-components/*": ["ui-components/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]
